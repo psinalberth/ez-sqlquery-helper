@@ -236,6 +236,8 @@ Por não se tratar de uma biblioteca ORM, se faz necessário conhecer as estrutu
 Quer criar o seu próprio *predicate*? É simples, basta criar uma classe e implementar a interface ```Predicate.java```, juntamente com o método ```render```, responsável pela renderização da sintaxe da condição desejada, como no exemplo abaixo:
 
 ```java
+@Getter
+@RequiredArgsConstructor
 public class RegexMatchPredicate implements Predicate {
 
 	...
