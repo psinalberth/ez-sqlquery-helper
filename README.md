@@ -101,56 +101,138 @@ List<Employee> findAllWithParameters(@Param("conditions") String conditions);
 ## Predicates [Condições] implementados
 - [x] Equal
 	```java
+	// Java syntax
 	builder.equal("e.section_id", 14L); 
+	```
+	```sql
+	-- SQL syntax
+	e.section_id = 14;
 	```
 - [x] Not Equal
 	```java
+	// Java syntax
 	builder.notEqual("e.employee_id", 1); 
+	```
+	```sql
+	-- SQL syntax
+	e.employeed_id <> 1;
 	```
 - [x] Greater Than
 	```java
+	// Java syntax
 	builder.gt("e.salary", BigDecimal.valueOf("3999.42")); 
 	builder.greaterThan("e.salary", BigDecimal.valueOf("3999.42")); 
 	```
+	```sql
+	-- SQL syntax
+	e.salary > 3999.42;
+	```
 - [x] Greater Than or Equal To
 	```java
+	// Java syntax
 	builder.ge("e.salary", BigDecimal.valueOf("3999.42")); 
 	builder.greaterThanOrEqualTo("e.salary", BigDecimal.valueOf("3999.42")); 
 	```
+	```sql
+	-- SQL syntax
+	e.salary >= 3999.42;
+	```
 - [x] Less Than
 	```java
+	// Java syntax
 	builder.lt("e.salary", BigDecimal.valueOf("5000.66")); 
 	builder.lessThan("e.salary", BigDecimal.valueOf("5000.66")); 
 	```
+	```sql
+	-- SQL syntax
+	e.salary < 5000.66;
+	```
 - [x] Less Than or Equal To
 	```java
+	// Java syntax
 	builder.le("e.salary", BigDecimal.valueOf("5000.66")); 
 	builder.lessThanOrEqualTo("e.salary", BigDecimal.valueOf("5000.66")); 
 	```
+	```sql
+	-- SQL syntax
+	e.salary <= 5000.66
+	```
 - [x] Between
 	```java
+	// Java syntax
 	builder.between("e.birth_date", LocalDate.of(1990, 01, 01), LocalDate.of(1991, 12, 31)); 
+	```
+	```sql
+	-- SQL syntax
+	e.birth_date between '1990-01-01' and '1991-12-31';
 	```
 - [x] Like
 	```java
+	// Java syntax
 	builder.like("e.name", "%Smith%"); 
+	```
+	```sql
+	-- SQL syntax
+	e.name like '%Smith%';
 	```
 - [x] Is Null
 	```java
+	// Java syntax
 	builder.isNull("e.email"); 
+	```
+	```sql
+	-- SQL syntax
+	e.email is null;
 	```
 - [x] In
 	```java
+	// Java syntax
 	builder.in("e.section_id", 1, 2, 3, 5, 7); 
 	builder.in("e.section_id", Arrays.asList(1, 2, 3, 5, 7)); 
 	```
+	```sql
+	-- SQL syntax
+	e.section_id in (1, 2, 3, 5, 7);
+	```
 - [x] Not
 	```java
+	// Java syntax
 	builder.not(builder.in("e.section_id", 1, 2, 3, 5, 7)); 
+	```
+	```sql
+	-- SQL syntax
+	e.section_id not in (1, 2, 3, 5, 7);
+	```
+- [x] And
+	```java
+	// Java syntax
+	builder.and(
+		builder.ge('e.salary', BigDecimal.valueOf("10000.00")), 
+		builder.in("e.section_id", 1, 2, 3, 5, 7)
+	); 
+	```
+	```sql
+	-- SQL syntax
+	(e.salary = 10000 and e.section_id in (1, 2, 3, 5, 7));
+	```
+- [x] Or
+	```java
+	// Java syntax
+	builder.or(
+		builder.equal('e.section_id', 12),
+		builder.isNull('e.section_id')
+	);
+	```
+	```sql
+	-- SQL syntax
+	(e.section_id = 12 or e.section_id is null);
 	```
 - [ ] Subquery
 
+## Limitações
+Por não se tratar de uma biblioteca ORM, se faz necessário conhecer as estruturas das tabelas e consulta principal, aplicando-se o *alias* adequado para cada relacionamento ao declarar *joins*, por exemplo.
 
+## Contribuições
 Quer criar o seu próprio *predicate*? É simples, basta criar uma classe e implementar a interface ```Predicate.java```, juntamente com o método ```render```, responsável pela renderização da sintaxe da condição desejada, como no exemplo abaixo:
 
 ```java
@@ -169,6 +251,3 @@ public class RegexMatchPredicate implements Predicate {
 	}
 }
 ```
-
-## Limitações
-Por não se tratar de uma biblioteca ORM, se faz necessário conhecer as estruturas das tabelas e consulta principal, aplicando-se o *alias* adequado para cada relacionamento ao declarar *joins*, por exemplo.
