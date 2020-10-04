@@ -150,6 +150,7 @@ List<Employee> findAllWithParameters(@Param("conditions") String conditions);
 	```
 - [ ] Subquery
 
+
 Quer criar o seu próprio *predicate*? É simples, basta criar uma classe e implementar a interface ```Predicate.java```, juntamente com o método ```render```, responsável pela renderização da sintaxe da condição desejada, como no exemplo abaixo:
 
 ```java
@@ -163,8 +164,8 @@ public class RegexMatchPredicate implements Predicate {
 	...
 
 	@Override
-	public String render() {
-		return getExpression() + " ~ " + getValue();
+	public String render(boolean isNegated) {
+		return (isNegated ? "not" : "") + getExpression() + " ~ " + getValue();
 	}
 }
 ```
