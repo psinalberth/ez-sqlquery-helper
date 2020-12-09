@@ -41,8 +41,8 @@ public class BetweenPredicate implements Predicate, Serializable {
 
     @Override
     public String render(boolean isNegated) {
-        return String.format("%s %s between %s and %s", getExpression(),
-                isNegated ? "not": "",
+        return String.format("%s %sbetween %s and %s", getExpression(),
+                isNegated ? "not ": "",
                 getFormattedValue(getLowerBound()),
                 getFormattedValue(getUpperBound()));
     }
