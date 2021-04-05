@@ -69,7 +69,7 @@ O Criteria Builder Helper é um utilitário inspirado na JPA Criteria API, abstr
 <dependency>  
 	<groupId>com.github.psinalberth</groupId>  
 	<artifactId>ez-sqlquery-helper</artifactId>  
-	<version>1.0</version>  
+	<version>0.0.1</version>  
 </dependency>
 ```
 Após importar a dependência, basta utilizar a classe ```CriteriaBuilder```, incluindo as condições de pesquisa desejadas. Para gerar o SQL final, utilize o método ```generateSql()```, que recebe uma lista de predicates e as renderiza em uma única String, a qual pode ser passada por parâmetro dentro do mapper correspondente;
