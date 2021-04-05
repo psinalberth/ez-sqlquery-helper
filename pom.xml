@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.psinalberth</groupId>
-    <artifactId>mybatis-criteria-query</artifactId>
+    <artifactId>ez-sqlquery-helper</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
