@@ -1,4 +1,4 @@
-# Mybatis Criteria Query Helper
+# ez-sqlquery-helper
 Imagine uma consulta com diversos parâmetros opcionais, todos escritos  em um arquivo xml como ```EmployeeMapper.xml```:  
   
 ```xml  
