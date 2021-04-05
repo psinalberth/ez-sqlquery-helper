@@ -1,23 +1,25 @@
-package com.github.psinalberth.criteria.predicate;
+package com.github.psinalberth.criteria.domain.predicate;
 
-import com.github.psinalberth.criteria.Predicate;
-import lombok.Getter;
+import com.github.psinalberth.criteria.domain.base.Predicate;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
 import java.util.stream.Collectors;
 
-@Getter
+/**
+ * Boolean predicate implementation.
+ * @see com.github.psinalberth.criteria.domain.base.Predicate
+ */
 @RequiredArgsConstructor
-public class BooleanPredicate implements Predicate, Serializable {
+public class BooleanPredicate<Y> extends AbstractPredicate<Y> {
 
     private final Operator operator;
     private final List<Predicate> predicates;
 
-    public BooleanPredicate(Operator operator, Predicate... predicates) {
+    public BooleanPredicate(Operator operator, @NonNull Predicate... predicates) {
        this(operator, Arrays.asList(predicates));
     }
 
@@ -39,12 +41,11 @@ public class BooleanPredicate implements Predicate, Serializable {
     @Override
     public String render(boolean isNegated) {
 
-        Objects.requireNonNull(getPredicates(), "Predicates cannot be null");
-
-        return  (isNegated ? "not " : "") +
-                "(" + this.getPredicates()
-                .stream()
+        final String operationClause = isNegated ? "not " : "";
+        String stringPredicates = predicates.stream()
                 .map(predicate -> predicate.render(false))
-                .collect(Collectors.joining(" " + getOperator().rendered() + " ")) + ")";
+                .collect(Collectors.joining(" " + operator.rendered() + " "));
+
+        return operationClause + "(" + stringPredicates + ")";
     }
 }
