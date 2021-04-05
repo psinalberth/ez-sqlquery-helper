@@ -68,7 +68,7 @@ O Criteria Builder Helper é um utilitário inspirado na JPA Criteria API, abstr
 ```xml
 <dependency>  
 	<groupId>com.github.psinalberth</groupId>  
-	<artifactId>mybatis-criteria-query-helper</artifactId>  
+	<artifactId>ez-sqlquery-helper</artifactId>  
 	<version>1.0</version>  
 </dependency>
 ```
