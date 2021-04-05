@@ -1,53 +1,45 @@
 package com.github.psinalberth.criteria.predicate;
 
-import com.github.psinalberth.criteria.CriteriaBuilder;
-import com.github.psinalberth.criteria.Predicate;
-import com.github.psinalberth.criteria.impl.CriteriaBuilderImpl;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-public class BetweenPredicateTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private CriteriaBuilder builder = new CriteriaBuilderImpl();
+@DisplayName("Test suite for \"BetweenPredicate\"")
+class BetweenPredicateTest extends BaseTest {
 
     @Test
-    public void shouldRenderBetweenNumbersPredicate() {
+    @DisplayName("Should render Temporal type predicate.")
+    void shouldRenderTemporalTypePredicate() {
 
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.between("age", 18, 25));
+        LocalDate checkInDate = LocalDate.of(2021, Month.APRIL, 2);
+        LocalDate checkOutDate = checkInDate.plusDays(2);
+
+        predicates.add(builder.between("reservationDate", checkInDate, checkOutDate));
+
         String result = builder.generateSql(predicates);
 
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.contains("age between 18 and 25"));
+        assertThat(result)
+                .isNotEmpty()
+                .containsSubsequence("reservationDate", "between", "'2021-04-02'", "and", "'2021-04-04'");
     }
 
     @Test
-    public void shouldRenderBetweenDatesPredicate() {
+    @DisplayName("Should render Numeric type predicate.")
+    void shouldRenderNumericTypePredicate() {
 
-        LocalDateTime startTime = LocalDateTime
-                .of(2020, Month.DECEMBER, 1, 8, 30, 0);
+        Integer initialOlympicsYear = 1984;
+        Integer finalOlympicsYear = 1992;
 
-        LocalDateTime endTime = LocalDateTime
-                .of(2020, Month.DECEMBER, 31, 23, 59, 59);
-
-        List<Predicate> predicates = new ArrayList<>();
-        predicates.add(builder.between("reservationDate",
-                Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()),
-                true));
+        predicates.add(builder.between("olympicsYear", initialOlympicsYear, finalOlympicsYear));
 
         String result = builder.generateSql(predicates);
 
-        System.out.println(result);
-
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.contains("reservationDate between '2020-12-01 08:30:00' and '2020-12-31 23:59:59'"));
+        assertThat(result)
+                .isNotEmpty()
+                .containsSubsequence("olympicsYear", "between", "1984", "and", "1992");
     }
 }

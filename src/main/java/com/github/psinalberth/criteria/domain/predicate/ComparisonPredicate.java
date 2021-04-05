@@ -1,18 +1,17 @@
-package com.github.psinalberth.criteria.predicate;
+package com.github.psinalberth.criteria.domain.predicate;
 
-import com.github.psinalberth.criteria.Predicate;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.io.Serializable;
-
-@Getter
+/**
+ * Comparison predicate implementation.
+ * @see com.github.psinalberth.criteria.domain.base.Predicate
+ */
 @RequiredArgsConstructor
-public class ComparisonPredicate implements Predicate, Serializable {
+public class ComparisonPredicate<Y> extends AbstractPredicate<Y> {
 
     private final Operator operator;
-    private final Object leftHandOperand;
-    private final Object rightHandOperand;
+    private final String expression;
+    private final Y rightHandOperand;
 
     public enum Operator {
         EQUAL {
@@ -49,15 +48,8 @@ public class ComparisonPredicate implements Predicate, Serializable {
         public abstract String rendered();
     }
 
-    private String getFormattedValue(Object value) {
-
-        if (value instanceof String)
-            return String.format("'%s'", value);
-
-        return String.valueOf(value);
-    }
-
     public String render(boolean isNegated) {
-        return getLeftHandOperand() + " " + getOperator().rendered() + " " + getFormattedValue(getRightHandOperand());
+        final String operationClause = isNegated ? " not " : " ";
+        return expression + operationClause + operator.rendered() + " " + convertParam(rightHandOperand);
     }
 }

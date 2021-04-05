@@ -1,0 +1,5 @@
+com.github.psinalberth.criteria.converter.spi.CalendarParamConverter
+com.github.psinalberth.criteria.converter.spi.CharSequenceParamConverter
+com.github.psinalberth.criteria.converter.spi.InstantParamConverter
+com.github.psinalberth.criteria.converter.spi.NumberParamConverter
+com.github.psinalberth.criteria.converter.spi.TemporalParamConverter

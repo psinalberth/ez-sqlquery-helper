@@ -1,43 +1,46 @@
 package com.github.psinalberth.criteria.predicate;
 
-import com.github.psinalberth.criteria.CriteriaBuilder;
-import com.github.psinalberth.criteria.Predicate;
-import com.github.psinalberth.criteria.impl.CriteriaBuilderImpl;
-import org.junit.Assert;
-import org.junit.Test;
+import com.github.psinalberth.criteria.domain.base.Predicate;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 
-public class BooleanPredicateTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private CriteriaBuilder builder = new CriteriaBuilderImpl();
+@DisplayName("Test suite for \"BooleanPredicate\"")
+class BooleanPredicateTest extends BaseTest {
 
     @Test
-    public void shouldRenderAndPredicate() {
+    @DisplayName("Should render AND predicate")
+    void shouldRenderAndPredicate() {
 
-        List<Predicate> predicates = new ArrayList<>();
-        Predicate xEqual10 = builder.equal("x", 10);
-        Predicate yGreaterThan20 = builder.greaterThan("y", 20);
+        Predicate ageEqual40 = builder.equal("age", 40);
+        Predicate salaryGreaterThan10000 = builder.greaterThan("salary", new BigDecimal("10000.00"));
+        Predicate companyIdIsNull = builder.isNull("companyId");
+        Predicate departmentIdLessThanOrEqualTo15 = builder.lessThanOrEqualTo("departmentId", 15);
 
-        predicates.add(builder.and(xEqual10, yGreaterThan20));
+        predicates.add(builder.and(ageEqual40, salaryGreaterThan10000, companyIdIsNull, departmentIdLessThanOrEqualTo15));
         String result = builder.generateSql(predicates);
 
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.contains("x = 10 and y > 20"));
+        assertThat(result)
+                .isNotEmpty()
+                .containsSubsequence("age = 40", "and", "salary > 10000.00", "and", "companyId is null", "and", "departmentId <= 15");
     }
 
     @Test
-    public void shouldRenderOrPredicate() {
+    @DisplayName("Should render OR predicate")
+    void shouldRenderOrPredicate() {
 
-        List<Predicate> predicates = new ArrayList<>();
-        Predicate xPlus2Equal18 = builder.equal("x + 2", 18);
-        Predicate nameEqualJohn = builder.equal("name", "John");
+        Predicate departmentIdNotEqual6 = builder.notEqual("departmentId", 6L);
+        Predicate companyIdGreaterThanOrEqualTo20 = builder.greaterThanOrEqualTo("companyId", 20);
+        Predicate employeedIdLessThan4 = builder.lessThan("employeeId", 4);
 
-        predicates.add(builder.or(xPlus2Equal18, nameEqualJohn));
+        predicates.add(builder.or(departmentIdNotEqual6, companyIdGreaterThanOrEqualTo20, employeedIdLessThan4));
         String result = builder.generateSql(predicates);
 
-        Assert.assertNotNull(result);
-        Assert.assertTrue(result.contains("x + 2 = 18 or name = 'John'"));
+        assertThat(result)
+                .isNotEmpty()
+                .containsSubsequence("departmentId", "<>", "6", "companyId", ">=", "20", "employeeId", "<", "4");
     }
 }
